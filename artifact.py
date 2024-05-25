@@ -195,7 +195,7 @@ for curly in range(len(global_initial_data)):
     modified_list.append(extract_element(global_initial_data[curly]))
 
 target_keys = [modified_list[0][0]] + modified_list[1:]
-print(target_keys)
+# print(target_keys)
 
 
 
@@ -274,8 +274,8 @@ final_local =  [target_keys  for target_keys in local_result.values()]
 
 final_global =  [target_keys  for target_keys in global_result.values()]
 
-print(final_global)
-print(final_local)
+# print(final_global)
+# print(final_local)
 
 #########  url_id  ##############
 
@@ -291,7 +291,7 @@ else:
     sub_str = "com"
     # slicing off after length computation
     url_id = a[:a.index(sub_str) + len(sub_str)]        
-print(url_id)
+# print(url_id)
 
 #########  repository_id  ##############
 
@@ -308,7 +308,7 @@ elif '$OO_GLOBAL' in b:
 else:
     repository_id = b
 
-print(repository_id)
+# print(repository_id)
 
 
 
@@ -327,7 +327,7 @@ elif '$OO_GLOBAL' in group_id_data[0]:
 else:
     modified_string = group_id_data[0]
 group_Id = modified_string.replace('.', '/')   
-print(group_Id)
+# print(group_Id)
 
 
 #########  artifact_id ##############
@@ -343,7 +343,7 @@ elif '$OO_GLOBAL' in group_id_data[1]:
         artifact_Id = global_result[artifact]
 else:
     modified_string = group_id_data[1]
-print(artifact_Id)
+# print(artifact_Id)
 #########  appversion_id ##############
 
 
@@ -357,7 +357,7 @@ elif '$OO_GLOBAL' in c:
         appVersion_id = global_result[appversion]
 else:
     appVersion_id = c
-print(appVersion_id)
+# print(appVersion_id)
 
 #########  extension_id ##############
 
@@ -372,7 +372,7 @@ elif '$OO_GLOBAL' in group_id_data[2]:
 else:
     extension_id = group_id_data[2]
 
-print(extension_id)
+# print(extension_id)
 
 
 if url_id ==  "https://mvn.ci.artifacts.walmart.com" or "mvn.artifacts.walmart.com" :
