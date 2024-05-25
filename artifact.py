@@ -12,13 +12,6 @@ app = FastAPI()
 
 print("Test Connection for Artifact")
 
-# artifact_url = input(" Enter Artifact component  Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
-
-
-# local_var = input(" Enter Local variable Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-
-# global_var = input(" Enter  Global variable  Oneops url ") or  'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
-
 
 artifact_old_url = input("enter Artifact component url : ")
 
@@ -48,11 +41,8 @@ else :
 
 
 
-#dummy_url = 'https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035/variables.json'
-# global_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
-# artifact_url = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
-# local_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-basic = HTTPBasicAuth('v0n00v2', 'Commando!209081')
+
+basic = HTTPBasicAuth('ID', 'Password')   # apply your user name and password
 headers = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
