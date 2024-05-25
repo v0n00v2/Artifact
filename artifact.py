@@ -10,13 +10,16 @@ import re
 
 app = FastAPI()
 
-print("TEST CONNECTION FOR ARTIFACT")
-# artifact_url = input(" Enter Artifact component  Oneops url ")
-# local_var = input(" Enter Local variable Oneops url ")
-# global_var = input(" Enter  Global variable  Oneops url ") or 'https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035/variables.json'
+print("Test Connection for Artifact")
+
+# artifact_url = input(" Enter Artifact component  Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
 
 
-import re
+# local_var = input(" Enter Local variable Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
+
+# global_var = input(" Enter  Global variable  Oneops url ") or  'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
+
+
 artifact_old_url = input("enter Artifact component url : ")
 
 if '#configuration' in artifact_old_url:
@@ -43,14 +46,13 @@ else :
     print("not find")
 
 
- 
 
 
 #dummy_url = 'https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035/variables.json'
 # global_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
 # artifact_url = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
 # local_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-basic = HTTPBasicAuth('username', 'password') # privide user name and passowrd 
+basic = HTTPBasicAuth('v0n00v2', 'Commando!209081')
 headers = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -87,6 +89,9 @@ print('---')
 print('######################################################')
 print('********************************************************************************************')
 print()
+
+
+
 
 
 local_var_platform = requests.get(local_var,  auth=basic, headers=headers)
@@ -127,9 +132,80 @@ global_var_data = global_url.json()
 #     with open(file_path, 'r') as file:
 #         return json.load(file)
 
-target_keys = [item for item in input("Enter the list variable like 1:repository 2:groupId 3:artifactId 4:appVersion 5:extension  respectively:  ").split()]
+
+self_initial_data= []
+local_initial_data=[]
+global_initial_data=[]
+hard_local_global = []
+group_id_data= []
+
+hard_local_global.append(a)
+
+hard_local_global.append(b)
+d.split(':')
+for element in d.split(':'):
+    group_id_data.append(element)
+    hard_local_global.append(element)
 
 
+
+hard_local_global.append(c)
+    
+# print(hard_local_global)
+
+for i  in range (len(hard_local_global)):
+    if '$OO_LOCAL' in hard_local_global[i]:
+        local_initial_data.append(hard_local_global[i])
+    elif '$OO_GLOBAL'  in hard_local_global[i]:
+        global_initial_data.append(hard_local_global[i])
+    else : 
+        self_initial_data.append(hard_local_global[i])
+
+
+# print("local : ", local_initial_data)
+# print("global : ", global_initial_data)   
+# print()
+modified_list = []
+# initializing sub string
+# sub_str = "com"
+# # slicing off after length computation
+# res = self_initial_data[:self_initial_data.index(sub_str) + len(sub_str)]
+
+modified_list.append(self_initial_data)
+
+
+# Function to extract the element between curly braces
+def extract_element(value):
+    match = re.search(r'\$\w+\{([^}]+)\}', value)
+    if match:
+        return match.group(1)
+    else:
+        return "No match found"
+
+# Extract and print the element
+# extracted_element_Local = extract_element(global_initial_data)
+# print(global_initial_data)
+
+for curly in range(len(local_initial_data)):
+    modified_list.append(extract_element(local_initial_data[curly]))
+# print(local_target_keys)
+
+# global_target_keys = []
+for curly in range(len(global_initial_data)):
+    modified_list.append(extract_element(global_initial_data[curly]))
+
+target_keys = [modified_list[0][0]] + modified_list[1:]
+print(target_keys)
+
+
+
+
+# target_keys = [item for item in input("Enter the list variable like 1:repository 2:groupId 3:artifactId 4:appVersion 5:extension  respectively:  ").split()]
+
+
+# global_taget_keys = [   .split()]
+
+    
 
 # Function to search for a value in the Local JSON data
 def search_value(local_data, target_key):
@@ -148,15 +224,15 @@ local_data = local_var_data
 # Search for each target key in the JSON data
     
 local_result = {}
-for local_target_key in target_keys:
+for target_key in target_keys:
         #print(f'Searching for {local_target_key} in Local variable.')
         try:
-            value = search_value(local_data, local_target_key)
+            value = search_value(local_data, target_key)
         except KeyError as e:
             print(e)
         else:
             #print(f' {local_target_key} :  {value}')
-            local_result[local_target_key] = value
+            local_result[target_key] = value
         
     
 print("Final for local_variable results:", local_result)
@@ -191,62 +267,119 @@ for target_key in target_keys:
        
 print("Final for Global_variable results:", global_result)
 
-print(target_keys)
+
 
 
 final_local =  [target_keys  for target_keys in local_result.values()]
 
 final_global =  [target_keys  for target_keys in global_result.values()]
 
-# print(final_global)
-# print(final_local)
+print(final_global)
+print(final_local)
 
+#########  url_id  ##############
 
-url_id = input("do you want to correction at url or press enter to continue :  ") or a
+if '$OO_LOCAL'  in local_result:
+        url = extract_element(a)
+        url_id = local_result[url]
+elif '$OO_GLOBAL' in global_result:
+    url = extract_element(a)
+    if url in global_result:
+        url_id = global_result[url]
+else:
+    
+    sub_str = "com"
+    # slicing off after length computation
+    url_id = a[:a.index(sub_str) + len(sub_str)]        
+print(url_id)
+
+#########  repository_id  ##############
+
 
 
 if '$OO_LOCAL' in b:
-        
-    new_repository_id =  final_local[0]
+    repo = extract_element(b)
+    if repo in local_result:
+        repository_id = local_result[repo]
+elif '$OO_GLOBAL' in b:
+    repo = extract_element(b)
+    if repo in global_result:
+        repository_id = global_result[repo]
 else:
-    new_repository_id =  final_global[0]
+    repository_id = b
 
-repository_id = input("do you want to correction at repository or press enter to continue :  ") or new_repository_id
+print(repository_id)
 
-if '$OO_LOCAL' in d:
-        
-    modified_string  =  final_local[1]
+
+
+#########  group_id ##############
+
+
+
+if '$OO_LOCAL' in group_id_data[0]:
+    groupid = extract_element(group_id_data[0])
+    if groupid in local_result:
+        modified_string = local_result[groupid]
+elif '$OO_GLOBAL' in group_id_data[0]:
+    groupid = extract_element(group_id_data[0])
+    if groupid in global_result:
+        modified_string = global_result[groupid]
 else:
-    modified_string  =  final_global[1]
+    modified_string = group_id_data[0]
+group_Id = modified_string.replace('.', '/')   
+print(group_Id)
 
-if '$OO_LOCAL' in d:
-        
-    artifact_Id =  final_local[2]
+
+#########  artifact_id ##############
+    
+
+if '$OO_LOCAL' in group_id_data[1]:
+    artifact = extract_element(group_id_data[1])
+    if artifact in local_result:
+        artifact_Id = local_result[artifact]
+elif '$OO_GLOBAL' in group_id_data[1]:
+    artifact = extract_element(group_id_data[1])
+    if artifact in global_result:
+        artifact_Id = global_result[artifact]
 else:
-    artifact_Id =  final_global[2]
+    modified_string = group_id_data[1]
+print(artifact_Id)
+#########  appversion_id ##############
+
 
 if '$OO_LOCAL' in c:
-        
-    appVersion_id =  final_local[3]
+    appversion = extract_element(c)
+    if appversion in local_result:
+        appVersion_id = local_result[appversion]
+elif '$OO_GLOBAL' in c:
+    appversion = extract_element(c)
+    if appversion in global_result:
+        appVersion_id = global_result[appversion]
 else:
-    appVersion_id =  final_global[3]
+    appVersion_id = c
+print(appVersion_id)
 
-if '$OO_LOCAL' in d:
-        
-    extension_id =  final_local[4]
+#########  extension_id ##############
+
+if '$OO_LOCAL' in group_id_data[2]:
+    extension = extract_element(group_id_data[2])
+    if extension in local_result:
+        extension_id = local_result[extension]
+elif '$OO_GLOBAL' in group_id_data[2]:
+    extension = extract_element(group_id_data[2])
+    if extension in global_result:
+        extension_id = global_result[extension]
 else:
-    extension_id =  final_global[4]
+    extension_id = group_id_data[2]
 
-# # # Replace periods with slashes
-group_Id = modified_string.replace('.', '/')
+print(extension_id)
 
 
-if url_id == "https://mvn.ci.artifacts.walmart.com/" or "https://mvn.ci.artifacts.walmart.com" :
+if url_id ==  "https://mvn.ci.artifacts.walmart.com" or "mvn.artifacts.walmart.com" :
 
     web_address = [f"{url_id}/artifactory/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
 
-elif url_id == "https://repository.walmart.com/" or "https://repository.walmart.com/" or "http://repo.wal-mart.com/" or "http://repo.wal-mart.com" :
-    
+else :
     web_address = [f"{url_id}/content/repositories/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
  
 statuses = {
