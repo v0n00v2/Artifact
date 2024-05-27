@@ -373,7 +373,7 @@ else :
     web_address = [f"{url_id}/content/repositories/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
  
 statuses = {
-    200: "Website Available",
+    200: "Artifact is Available",
     301: "Permanent Redirect",
     302: "Temporary Redirect",
     404: "Not Found",
