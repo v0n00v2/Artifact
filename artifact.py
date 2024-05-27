@@ -365,7 +365,7 @@ else:
 # print(extension_id)
 
 
-if url_id ==  "https://mvn.ci.artifacts.walmart.com" or "mvn.artifacts.walmart.com" :
+if 'mvn' in url_id:
 
     web_address = [f"{url_id}/artifactory/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
 
