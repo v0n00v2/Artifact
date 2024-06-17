@@ -12,6 +12,13 @@ app = FastAPI()
 
 print("Test Connection for Artifact")
 
+# artifact_url = input(" Enter Artifact component  Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
+
+
+# local_var = input(" Enter Local variable Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
+
+# global_var = input(" Enter  Global variable  Oneops url ") or  'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
+
 
 artifact_old_url = input("enter Artifact component url : ")
 
@@ -41,8 +48,11 @@ else :
 
 
 
-
-basic = HTTPBasicAuth('ID', 'Password')   # apply your user name and password
+#dummy_url = 'https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035/variables.json'
+# global_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
+# artifact_url = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
+# local_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
+basic = HTTPBasicAuth('v0n00v2', 'Commando!209081')
 headers = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -68,20 +78,17 @@ d = platform_var_data['ciAttributes']['location']
 print()
 print('###################  Variable define at Artifact-Component #################################')
 print()
-print ({"Url " : a  })
+print ("Url :", a  )
 print('---')
-print ({"Repository " :  b  })
+print ("Repository :", b )
 print('---')
-print({"Location ":  d })
+print("Location :", d )
 print('---')
-print({"Version ": c })
+print("Version :", c )
 print('---')
 print('######################################################')
 print('********************************************************************************************')
 print()
-
-
-
 
 
 local_var_platform = requests.get(local_var,  auth=basic, headers=headers)
@@ -123,48 +130,28 @@ global_var_data = global_url.json()
 #         return json.load(file)
 
 
+
+# https://mvn.ci.artifacts.walmart.com/artifactory/platform-mvn/com/walmart/platform/managed/proxy-tomee-server/0.7/proxy-tomee-server-0.7.jar
+
 self_initial_data= []
 local_initial_data=[]
 global_initial_data=[]
+cloud_initial_data=[]
 hard_local_global = []
 group_id_data= []
 
-hard_local_global.append(a)
 
+hard_local_global.append(a)
 hard_local_global.append(b)
 d.split(':')
 for element in d.split(':'):
     group_id_data.append(element)
     hard_local_global.append(element)
+print(group_id_data)
 
-
-
-hard_local_global.append(c)
-    
-# print(hard_local_global)
-
-for i  in range (len(hard_local_global)):
-    if '$OO_LOCAL' in hard_local_global[i]:
-        local_initial_data.append(hard_local_global[i])
-    elif '$OO_GLOBAL'  in hard_local_global[i]:
-        global_initial_data.append(hard_local_global[i])
-    else : 
-        self_initial_data.append(hard_local_global[i])
-
-
-# print("local : ", local_initial_data)
-# print("global : ", global_initial_data)   
-# print()
-modified_list = []
-# initializing sub string
-# sub_str = "com"
-# # slicing off after length computation
-# res = self_initial_data[:self_initial_data.index(sub_str) + len(sub_str)]
-
-modified_list.append(self_initial_data)
-
-
-# Function to extract the element between curly braces
+# here we replace ".",":" with "/" and seprate file_extension
+#Function to extract the element between curly braces
+#location_list = []  
 def extract_element(value):
     match = re.search(r'\$\w+\{([^}]+)\}', value)
     if match:
@@ -172,20 +159,56 @@ def extract_element(value):
     else:
         return "No match found"
 
-# Extract and print the element
-# extracted_element_Local = extract_element(global_initial_data)
-# print(global_initial_data)
+hard_local_global.append(c)
+#hard_local_global.append(file_extension)
+
+
+for i  in range (len(hard_local_global)):
+    if '$OO_LOCAL' in hard_local_global[i]:
+        local_initial_data.append(hard_local_global[i])
+    elif '$OO_GLOBAL'  in hard_local_global[i]:
+        global_initial_data.append(hard_local_global[i])
+    elif '$OO_CLOUD'  in hard_local_global[i]:
+        cloud_variable = input("enter cloud variable  : ")
+        cloud_initial_data.append(cloud_variable)
+    else : 
+        self_initial_data.append(hard_local_global[i])
+
+# print("$OO_LOCAL : ", local_initial_data)
+# print("$OO_GLOBAL : ", global_initial_data) 
+# print("$OO_CLOUD: " , cloud_initial_data) 
+# print("HardCode: " , self_initial_data)  
+# print()
+# print("All value extracted form hard,local,global,cloud  :",  hard_local_global)
+
+modified_list = []
+
+modified_list.append(self_initial_data)
+# print(modified_list)
 
 for curly in range(len(local_initial_data)):
     modified_list.append(extract_element(local_initial_data[curly]))
 # print(local_target_keys)
+# print(modified_list)
 
 # global_target_keys = []
 for curly in range(len(global_initial_data)):
     modified_list.append(extract_element(global_initial_data[curly]))
+# print(modified_list)
 
-target_keys = [modified_list[0][0]] + modified_list[1:]
-# print(target_keys)
+for curly in range(len(cloud_initial_data)):
+    modified_list.append(extract_element(cloud_initial_data[curly]))
+# print(modified_list)
+
+target_keys=[]
+for i in modified_list:
+    if type(i) is list:
+        target_keys.extend(i)
+    else:
+        target_keys.append(i)
+print(target_keys)
+
+
 
 
 
@@ -267,21 +290,22 @@ final_global =  [target_keys  for target_keys in global_result.values()]
 # print(final_global)
 # print(final_local)
 
+
 #########  url_id  ##############
 
-if '$OO_LOCAL'  in local_result:
-        url = extract_element(a)
-        url_id = local_result[url]
-elif '$OO_GLOBAL' in global_result:
+if '$OO_LOCAL'  in a:
+    url = extract_element(a)
+    if url in local_result:
+            url_id = local_result[url]
+elif '$OO_GLOBAL' in a:
     url = extract_element(a)
     if url in global_result:
         url_id = global_result[url]
 else:
-    
     sub_str = "com"
     # slicing off after length computation
     url_id = a[:a.index(sub_str) + len(sub_str)]        
-# print(url_id)
+print(url_id)
 
 #########  repository_id  ##############
 
@@ -298,82 +322,94 @@ elif '$OO_GLOBAL' in b:
 else:
     repository_id = b
 
-# print(repository_id)
+print(repository_id)
 
 
 
 #########  group_id ##############
 
 
+if "$OO_" not in d:
+    replaced_str = d.replace('.', '/')
+    parts = replaced_str.split(':')
+    group_id = '/'.join(parts[:-1])
+    print(group_id)
+elif '$OO_LOCAL' in d:
+    group_new_id = extract_element(group_id_data[0])
+    modified_string = local_result[group_new_id]
+    group_id = modified_string.replace('.', '/')
+    print(group_id)
+elif '$OO_GLOBAL' in d:
+    group_new_id = extract_element(group_id_data[0])
+    modified_string = global_result[group_new_id]
+    group_id = modified_string.replace('.', '/')
+    print(group_id)
 
-if '$OO_LOCAL' in group_id_data[0]:
-    groupid = extract_element(group_id_data[0])
-    if groupid in local_result:
-        modified_string = local_result[groupid]
-elif '$OO_GLOBAL' in group_id_data[0]:
-    groupid = extract_element(group_id_data[0])
-    if groupid in global_result:
-        modified_string = global_result[groupid]
-else:
-    modified_string = group_id_data[0]
-group_Id = modified_string.replace('.', '/')   
-# print(group_Id)
 
 
-#########  artifact_id ##############
-    
+#########  Artifact_id ##############
 
-if '$OO_LOCAL' in group_id_data[1]:
-    artifact = extract_element(group_id_data[1])
-    if artifact in local_result:
-        artifact_Id = local_result[artifact]
-elif '$OO_GLOBAL' in group_id_data[1]:
-    artifact = extract_element(group_id_data[1])
-    if artifact in global_result:
-        artifact_Id = global_result[artifact]
-else:
-    modified_string = group_id_data[1]
-# print(artifact_Id)
-#########  appversion_id ##############
-
+if "$OO_" not in d:
+    replaced_str = d.replace('.', '/')
+    parts = replaced_str.split(':')
+    artifact_id = '/'.join(parts[:-1])
+    print(artifact_id)
+    artifact_id = parts[1]
+    print(artifact_id)
+elif '$OO_LOCAL' in d:
+    group_new_id = extract_element(group_id_data[1])
+    modified_string = local_result[group_new_id]
+    artifact_id = modified_string.replace('.', '/')
+    print(artifact_id)
+elif '$OO_GLOBAL' in d:
+    group_new_id = extract_element(group_id_data[1])
+    modified_string = global_result[group_new_id]
+    artifact_id = modified_string.replace('.', '/')
+    print(artifact_id)
+# #########  appversion_id ##############
 
 if '$OO_LOCAL' in c:
     appversion = extract_element(c)
-    if appversion in local_result:
-        appVersion_id = local_result[appversion]
+    appVersion_id = local_result[appversion]
+    print(appVersion_id)
 elif '$OO_GLOBAL' in c:
     appversion = extract_element(c)
-    if appversion in global_result:
-        appVersion_id = global_result[appversion]
+    appVersion_id = global_result[appversion]
+    print(appVersion_id)
 else:
     appVersion_id = c
-# print(appVersion_id)
+    print(appVersion_id)
 
 #########  extension_id ##############
 
-if '$OO_LOCAL' in group_id_data[2]:
-    extension = extract_element(group_id_data[2])
-    if extension in local_result:
-        extension_id = local_result[extension]
-elif '$OO_GLOBAL' in group_id_data[2]:
-    extension = extract_element(group_id_data[2])
-    if extension in global_result:
-        extension_id = global_result[extension]
-else:
-    extension_id = group_id_data[2]
+if "$OO_" not in d:
+    replaced_str = d.replace('.', '/')
+    parts = replaced_str.split(':')
+    group_id = '/'.join(parts[:-1])
+    extension_id = parts[-1]
+    print(extension_id)
+elif '$OO_LOCAL' in d:
+    extension = extract_element(group_id_data[-1])
+    extension_id = local_result[extension]
+    print(extension_id)
+elif '$OO_GLOBAL' in group_id_data[-1]:
+    extension = extract_element(group_id_data[-1])
+    extension_id = global_result[extension]
+    print(extension_id)
 
-# print(extension_id)
 
-
-if 'mvn' in url_id:
-
-    web_address = [f"{url_id}/artifactory/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
-
+if  'mvn' in url_id:
+        if "$OO_" not in d:
+            web_address = [f"{url_id}/artifactory/{repository_id}/{group_id}/{appVersion_id}/{artifact_id}-{appVersion_id}.{extension_id}"]
+        else:           
+            web_address = [f"{url_id}/artifactory/{repository_id}/{group_id}/{artifact_id}/{appVersion_id}/{artifact_id}-{appVersion_id}.{extension_id}"]
 else :
-    web_address = [f"{url_id}/content/repositories/{repository_id}/{group_Id}/{artifact_Id}/{appVersion_id}/{artifact_Id}-{appVersion_id}.{extension_id}"]
- 
+    if "$OO_" not in d:
+        web_address = [f"{url_id}/content/repositories/{repository_id}/{group_id}/{appVersion_id}/{artifact_id}-{appVersion_id}.{extension_id}"]
+    else:
+        web_address = [f"{url_id}/content/repositories/{repository_id}/{group_id}/{artifact_id}/{appVersion_id}/{artifact_id}-{appVersion_id}.{extension_id}"]
 statuses = {
-    200: "Artifact is Available",
+    200: "Artifact Available",
     301: "Permanent Redirect",
     302: "Temporary Redirect",
     404: "Not Found",
@@ -387,13 +423,4 @@ for url in web_address:
         print(url, statuses[web_response.status_code])
     
     except:
-        print(url, statuses[web_response.status_code])          
-
-
-            
-        
-        
-
-
-    
-
+        print(url, statuses[web_response.status_code])         
