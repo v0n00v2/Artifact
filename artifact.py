@@ -52,7 +52,7 @@ else :
 # global_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
 # artifact_url = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
 # local_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-basic = HTTPBasicAuth('v0n00v2', 'Commando!209081')
+basic = HTTPBasicAuth('User_name', 'Password')
 headers = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
