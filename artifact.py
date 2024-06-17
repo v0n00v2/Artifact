@@ -6,21 +6,12 @@ from fastapi.params import Body
 from typing import Optional
 import re
 
+print()
+print()
+print("#####################################Test Connection for Artifact#######################################")
+print("########################################################################################################")
 
-
-app = FastAPI()
-
-print("Test Connection for Artifact")
-
-# artifact_url = input(" Enter Artifact component  Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
-
-
-# local_var = input(" Enter Local variable Oneops url ") or 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-
-# global_var = input(" Enter  Global variable  Oneops url ") or  'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
-
-
-artifact_old_url = input("enter Artifact component url : ")
+artifact_old_url = input("Enter Artifact component url : ")
 
 if '#configuration' in artifact_old_url:
     artifact_url = artifact_old_url.replace("#configuration", ".json")
@@ -28,7 +19,7 @@ else :
     print("not find")
 
 
-local_old_url = input("enter local variable url : ")
+local_old_url = input("Enter local variable url, if not available then press enter: ") or "https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035#variables"
 
 if '#variables' in local_old_url:
     local_var = local_old_url.replace("#variables", "/variables.json")
@@ -37,7 +28,7 @@ else :
 
 
 
-global_old_url = input("enter global variable  url : ") or "https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035#variables"
+global_old_url = input("enter global variable  url if not available then press enter : ") or "https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035#variables"
 
 if '#variables' in global_old_url:
     global_var = global_old_url.replace("#variables", "/variables.json")
@@ -45,14 +36,7 @@ if '#variables' in global_old_url:
 else :
     print("not find")
 
-
-
-
-#dummy_url = 'https://oneops.prod.walmart.com/boppa/assemblies/SGAv2-REST/transition/environments/498128035/variables.json'
-# global_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/988438002/variables.json'
-# artifact_url = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/574888052/transition/environments/988438002/platforms/988438042/components/988438105/edit.json'
-# local_var = 'https://oneops.prod.walmart.com/ukgrsps/assemblies/asda-user-lists/transition/environments/prod-canary/platforms/user-lists!1/variables.json'
-basic = HTTPBasicAuth('User_name', 'Password')
+basic = HTTPBasicAuth('username', 'Password')
 headers = {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -75,22 +59,6 @@ c = platform_var_data['ciAttributes']['version']
 d = platform_var_data['ciAttributes']['location']
 
 
-print()
-print('###################  Variable define at Artifact-Component #################################')
-print()
-print ("Url :", a  )
-print('---')
-print ("Repository :", b )
-print('---')
-print("Location :", d )
-print('---')
-print("Version :", c )
-print('---')
-print('######################################################')
-print('********************************************************************************************')
-print()
-
-
 local_var_platform = requests.get(local_var,  auth=basic, headers=headers)
 local_var_data = local_var_platform.json()
 # with open("oneops_local_var.json", "w") as file:
@@ -100,9 +68,6 @@ local_var_data = local_var_platform.json()
 
 # with open("oneops_local_data.json") as file:
 #     local_var_data =  json.load(file)
-
-
-
 
 
 global_url = requests.get(global_var,  auth=basic, headers=headers)
@@ -115,23 +80,6 @@ global_var_data = global_url.json()
 
 # with open("oneops_global_data.json") as file:
 #     global_var_data =  json.load(file)
-
-
-# @app.get("/platform")
-# #def get_posts():
-   
-   
-#@app.get("/platform/local")
-#def get_posts():
-
-# Function to load JSON data from a file
-# def load_json(file_path):
-#     with open(file_path, 'r') as file:
-#         return json.load(file)
-
-
-
-# https://mvn.ci.artifacts.walmart.com/artifactory/platform-mvn/com/walmart/platform/managed/proxy-tomee-server/0.7/proxy-tomee-server-0.7.jar
 
 self_initial_data= []
 local_initial_data=[]
@@ -147,7 +95,7 @@ d.split(':')
 for element in d.split(':'):
     group_id_data.append(element)
     hard_local_global.append(element)
-print(group_id_data)
+# print(group_id_data)
 
 # here we replace ".",":" with "/" and seprate file_extension
 #Function to extract the element between curly braces
@@ -206,18 +154,7 @@ for i in modified_list:
         target_keys.extend(i)
     else:
         target_keys.append(i)
-print(target_keys)
-
-
-
-
-
-
-# target_keys = [item for item in input("Enter the list variable like 1:repository 2:groupId 3:artifactId 4:appVersion 5:extension  respectively:  ").split()]
-
-
-# global_taget_keys = [   .split()]
-
+# print(target_keys)
     
 
 # Function to search for a value in the Local JSON data
@@ -242,13 +179,13 @@ for target_key in target_keys:
         try:
             value = search_value(local_data, target_key)
         except KeyError as e:
-            print(e)
+            e
         else:
             #print(f' {local_target_key} :  {value}')
             local_result[target_key] = value
         
     
-print("Final for local_variable results:", local_result)
+# print("Final for local_variable results:", local_result)
 print()
 print()
 
@@ -273,15 +210,12 @@ for target_key in target_keys:
         try:
             value = search_value(global_data, target_key)
         except KeyError as e:
-            print(e)
+            e
         else:
             #print(f' {target_key} :  {value}')
             global_result[target_key] = value
        
-print("Final for Global_variable results:", global_result)
-
-
-
+# print("Final for Global_variable results:", global_result)
 
 final_local =  [target_keys  for target_keys in local_result.values()]
 
@@ -305,7 +239,7 @@ else:
     sub_str = "com"
     # slicing off after length computation
     url_id = a[:a.index(sub_str) + len(sub_str)]        
-print(url_id)
+# print(url_id)
 
 #########  repository_id  ##############
 
@@ -322,7 +256,7 @@ elif '$OO_GLOBAL' in b:
 else:
     repository_id = b
 
-print(repository_id)
+# print(repository_id)
 
 
 
@@ -333,17 +267,17 @@ if "$OO_" not in d:
     replaced_str = d.replace('.', '/')
     parts = replaced_str.split(':')
     group_id = '/'.join(parts[:-1])
-    print(group_id)
+    # print(group_id)
 elif '$OO_LOCAL' in d:
     group_new_id = extract_element(group_id_data[0])
     modified_string = local_result[group_new_id]
     group_id = modified_string.replace('.', '/')
-    print(group_id)
+    # print(group_id)
 elif '$OO_GLOBAL' in d:
     group_new_id = extract_element(group_id_data[0])
     modified_string = global_result[group_new_id]
     group_id = modified_string.replace('.', '/')
-    print(group_id)
+    # print(group_id)
 
 
 
@@ -353,32 +287,32 @@ if "$OO_" not in d:
     replaced_str = d.replace('.', '/')
     parts = replaced_str.split(':')
     artifact_id = '/'.join(parts[:-1])
-    print(artifact_id)
+    # print(artifact_id)
     artifact_id = parts[1]
-    print(artifact_id)
+    # print(artifact_id)
 elif '$OO_LOCAL' in d:
     group_new_id = extract_element(group_id_data[1])
     modified_string = local_result[group_new_id]
     artifact_id = modified_string.replace('.', '/')
-    print(artifact_id)
+    # print(artifact_id)
 elif '$OO_GLOBAL' in d:
     group_new_id = extract_element(group_id_data[1])
     modified_string = global_result[group_new_id]
     artifact_id = modified_string.replace('.', '/')
-    print(artifact_id)
+    # print(artifact_id)
 # #########  appversion_id ##############
 
 if '$OO_LOCAL' in c:
     appversion = extract_element(c)
     appVersion_id = local_result[appversion]
-    print(appVersion_id)
+    # print(appVersion_id)
 elif '$OO_GLOBAL' in c:
     appversion = extract_element(c)
     appVersion_id = global_result[appversion]
-    print(appVersion_id)
+    # print(appVersion_id)
 else:
     appVersion_id = c
-    print(appVersion_id)
+    # print(appVersion_id)
 
 #########  extension_id ##############
 
@@ -387,16 +321,60 @@ if "$OO_" not in d:
     parts = replaced_str.split(':')
     group_id = '/'.join(parts[:-1])
     extension_id = parts[-1]
-    print(extension_id)
+    # print(extension_id)
 elif '$OO_LOCAL' in d:
     extension = extract_element(group_id_data[-1])
     extension_id = local_result[extension]
-    print(extension_id)
+    # print(extension_id)
 elif '$OO_GLOBAL' in group_id_data[-1]:
     extension = extract_element(group_id_data[-1])
     extension_id = global_result[extension]
-    print(extension_id)
+    # print(extension_id)
 
+print()
+print('###################  Variable define at Artifact-Component and Value  #################################')
+print()
+if "$OO_" not in a:
+    print ("Url :", a  )
+else:
+    print ("Url :", a , "====>>>>", url_id  )
+
+print('---')
+
+
+if "$OO_" not in b:
+    print ("Repository :", b )
+else:
+    print ("Repository :", b , "====>>>>", repository_id  )
+
+print('-----------')
+
+if "$OO_" not in d:
+    print("Location :", d  )
+
+else:
+    
+    print ("Group_ID :", d , "====>>>>", group_id   )
+    print('---------')
+    print ("Artifact_ID :", d , "====>>>>", artifact_id   )
+    print('---------')
+    print ("Extension : ====>>>>", extension_id   )
+
+print('----------')
+
+
+
+if "$OO_" not in c:
+    print("Version :", c )
+else:
+    print ("Version :", c , "====>>>>", appVersion_id  )
+
+print('-------')
+
+
+print('######################################################')
+print('********************************************************************************************')
+print()
 
 if  'mvn' in url_id:
         if "$OO_" not in d:
@@ -420,7 +398,9 @@ statuses = {
 for url in web_address:
     try:
         web_response = requests.get(url)
-        print(url, statuses[web_response.status_code])
+        print(url, "===>>>>", statuses[web_response.status_code])
     
     except:
-        print(url, statuses[web_response.status_code])         
+        print(url, "===>>>", statuses[web_response.status_code])         
+
+
